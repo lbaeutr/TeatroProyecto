@@ -1,7 +1,11 @@
 package Frames;
+import DAO.Conexion;
+import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
+     Conexion conex = new Conexion();
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

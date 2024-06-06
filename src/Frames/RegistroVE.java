@@ -1,4 +1,6 @@
 package Frames;
+import DAO.ClienteDao;
+import Logica.Cliente;
 public class RegistroVE extends javax.swing.JPanel {
     public RegistroVE() {
         initComponents();
@@ -120,6 +122,9 @@ public class RegistroVE extends javax.swing.JPanel {
         contenido.add(ventaEntradas);
         contenido.revalidate();
         contenido.repaint();
+        Cliente cliente = new Cliente (TFdni.getText(), TFnombre.getText(), TFprApellido.getText(), TFsgApellido.getText());
+        ClienteDao clienteDao = new ClienteDao();
+        clienteDao.crear(cliente);
     }//GEN-LAST:event_EnviarActionPerformed
 
 
