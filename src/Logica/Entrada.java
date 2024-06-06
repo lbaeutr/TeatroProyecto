@@ -1,9 +1,6 @@
-package logica;
-
+package Logica;
 import java.time.LocalDate;
-
 public class Entrada {
-
     private String codEntrada;
     private Cliente cliente;
     private Espectaculo espectaculo;
@@ -24,7 +21,6 @@ public class Entrada {
 
     public Entrada(String codEntrada, String codEspectaculo, String dni, int fila, int columna, LocalDate localDate,
             double precio) {
-
     }
 
     public String getCodEntrada() {
@@ -82,5 +78,4 @@ public class Entrada {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
-
 }

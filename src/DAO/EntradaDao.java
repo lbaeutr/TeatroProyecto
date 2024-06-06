@@ -1,18 +1,12 @@
 package DAO;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import logica.Entrada;
-import logica.Espectaculo;
-import logica.Cliente;
-
+import Logica.*;
 public class EntradaDao extends Conexion {
-
     public void actualizar(Entrada entrada, Cliente cliente, Espectaculo espectaculo) {
         String consultaSQL = "UPDATE entrada SET codEspectaculo = ?, dni = ?, fila = ?, columna = ?, fechaCompra = ?, precio = ? WHERE codEntrada = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
@@ -39,11 +33,9 @@ public class EntradaDao extends Conexion {
             statement.setDate(5, Date.valueOf(entrada.getFechaCompra()));
             statement.setDouble(6, entrada.getPrecio());
             statement.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void eliminar(String id) {
@@ -106,5 +98,4 @@ public class EntradaDao extends Conexion {
         }
         return listaEntradas;
     }
-
 }

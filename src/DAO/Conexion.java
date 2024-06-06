@@ -1,11 +1,9 @@
 package DAO;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexion {
-
     protected Connection conexion;
     private final String url = "";
     private final String user = "";
