@@ -1,4 +1,4 @@
-package Logica;
+/*package Logica;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,4 +62,4 @@ public class App {
         }
         return asientos;
     }
-}
+}*/
