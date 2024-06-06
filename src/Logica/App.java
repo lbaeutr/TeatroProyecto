@@ -1,21 +1,26 @@
-package Logica;
+package logica;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
+
     public static void main(String[] args) throws Exception {
         String opcion;
         int fila;
         int columna;
         boolean bandera = false;
         Scanner sc = new Scanner(System.in);
+
         char asientos[][] = new char[10][10];
+
         teatroVacio(asientos);
         imprimirMatriz(asientos);
         comprarEntrada(asientos, sc);
         imprimirMatriz(asientos);
+
     }
 
     public static char[][] teatroVacio(char[][] asientos) {
@@ -42,6 +47,7 @@ public class App {
         int fila;
         int columna;
         boolean bandera = false;
+
         while (bandera == false) {
             System.out.println("Introduce la fila");
             fila = sc.nextInt();
@@ -49,6 +55,7 @@ public class App {
             System.out.println("Introduce la columna");
             columna = sc.nextInt();
             sc.nextLine();
+
             if (asientos[fila - 1][columna - 1] == 'O') {
                 asientos[fila - 1][columna - 1] = 'x';
             } else {
@@ -62,5 +69,5 @@ public class App {
         }
         return asientos;
     }
-    /*Esto para borrar*/
+
 }

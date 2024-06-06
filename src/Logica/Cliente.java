@@ -1,5 +1,7 @@
-package Logica;
+package logica;
+
 public class Cliente {
+
     private String dni;
     private String nombre;
     private String prApellido;
@@ -43,4 +45,5 @@ public class Cliente {
     public void setSgApellido(String sgApellido) {
         this.sgApellido = sgApellido;
     }
+
 }
