@@ -62,5 +62,5 @@ public class App {
         }
         return asientos;
     }
-
+/*Añadido comentario por Amanda para probar que esta arreglado*/
 }
