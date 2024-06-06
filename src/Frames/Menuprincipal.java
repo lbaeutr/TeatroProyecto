@@ -247,7 +247,7 @@ public class Menuprincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable CatalogoBBDD;
+    public javax.swing.JTable CatalogoBBDD;
     private javax.swing.JButton botonAdministrar;
     private javax.swing.JButton botonCalculoDinero;
     private javax.swing.JButton botonCatalogo;
