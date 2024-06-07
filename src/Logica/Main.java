@@ -1,4 +1,4 @@
-package logica;
+package Logica;
 
 import DAO.*;
 import Frames.*;
@@ -10,7 +10,5 @@ public class Main {
         Login login = new Login();
         login.setVisible(true);
         login.setLocationRelativeTo(null);
-
     }
-
 }

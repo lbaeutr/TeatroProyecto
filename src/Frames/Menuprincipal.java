@@ -1,6 +1,4 @@
 package Frames;
-
-
 import DAO.Conexion;
 
 import javax.annotation.processing.SupportedSourceVersion;
@@ -10,6 +8,7 @@ import java.sql.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -29,39 +28,6 @@ public class Menuprincipal extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-    public void mostrar(String tabla){
-        String consultaSql = "SELECT * FROM " + tabla;
-        DefaultTableModel model = new DefaultTableModel();
-        String[] datos = new String[6];
-        conex.conectar();
-        model.addColumn("Cod");
-        model.addColumn("Numero");
-        model.addColumn("Nombre");
-        model.addColumn("Genero");
-        model.addColumn("Fecha");
-        model.addColumn("Información");
-        CatalogoBBDD.setModel(model);
-        try (Connection connection = conex.getConexion();
-             PreparedStatement statement = connection.prepareStatement(consultaSql)) {
-            
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-               datos [0] = resultSet.getString(1);
-               datos [1] = resultSet.getString(2); // por si acaso no sale, es un INT
-               datos [2] = resultSet.getString(3);
-               datos [3] = resultSet.getString(4);
-               datos [4] = resultSet.getString(5); // por si acaso no sale, es un DATE
-               datos[5] = resultSet.getString(6);
-               model.addRow(datos);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,9 +38,7 @@ public class Menuprincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        CatalogoBBDD = new javax.swing.JTable();
+        contenido = new javax.swing.JPanel();
         botonDesconectar = new javax.swing.JButton();
         fotoTelon = new javax.swing.JLabel();
         botonAdministrar = new javax.swing.JButton();
@@ -89,37 +53,23 @@ public class Menuprincipal extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 255, 255)));
-        jPanel3.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel3.setToolTipText("");
+        contenido.setBackground(new java.awt.Color(70, 73, 75));
+        contenido.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 255, 255)));
+        contenido.setForeground(new java.awt.Color(255, 255, 255));
+        contenido.setToolTipText("");
 
-        CatalogoBBDD.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Cod", "Nombre", "Genero", "Fecha", "Num", "Info"
-            }
-        ));
-        jScrollPane1.setViewportView(CatalogoBBDD);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+        javax.swing.GroupLayout contenidoLayout = new javax.swing.GroupLayout(contenido);
+        contenido.setLayout(contenidoLayout);
+        contenidoLayout.setHorizontalGroup(
+            contenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 676, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+        contenidoLayout.setVerticalGroup(
+            contenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 476, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 680, 480));
+        jPanel1.add(contenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 680, 480));
 
         botonDesconectar.setBackground(new java.awt.Color(102, 0, 0));
         botonDesconectar.setFont(new java.awt.Font("Dubai", 0, 48)); // NOI18N
@@ -188,15 +138,33 @@ public class Menuprincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAdministrarActionPerformed
-        // TODO add your handling code here:
+        Administrar administar = new Administrar();
+        administar.setSize(680, 480);
+        administar.setVisible(true);
+        contenido.removeAll();
+        contenido.add(administar);
+        contenido.revalidate();
+        contenido.repaint();
     }//GEN-LAST:event_botonAdministrarActionPerformed
 
     private void botonVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVentaActionPerformed
-        // TODO add your handling code here:
+        RegistroVE registroVE = new RegistroVE();
+        registroVE.setSize(680, 480);
+        registroVE.setVisible(true);
+        contenido.removeAll();
+        contenido.add(registroVE);
+        contenido.revalidate();
+        contenido.repaint();
     }//GEN-LAST:event_botonVentaActionPerformed
 
     private void botonCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCatalogoActionPerformed
-        mostrar("prueba");
+       Catalogo catalogo = new Catalogo();
+        catalogo.setSize(680, 480);
+        catalogo.setVisible(true);
+        contenido.removeAll();
+        contenido.add(catalogo);
+        contenido.revalidate();
+        contenido.repaint();
     }//GEN-LAST:event_botonCatalogoActionPerformed
 
     private void botonDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDesconectarActionPerformed
@@ -214,13 +182,13 @@ public class Menuprincipal extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -239,25 +207,23 @@ public class Menuprincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Menuprincipal().setVisible(true);
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JTable CatalogoBBDD;
     private javax.swing.JButton botonAdministrar;
     private javax.swing.JButton botonCalculoDinero;
     private javax.swing.JButton botonCatalogo;
     private javax.swing.JButton botonDesconectar;
     private javax.swing.JButton botonVenta;
+    private javax.swing.JPanel contenido;
     private javax.swing.JLabel fotoGTF;
     private javax.swing.JLabel fotoTelon;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
     

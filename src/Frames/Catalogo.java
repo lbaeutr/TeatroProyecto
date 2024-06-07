@@ -4,17 +4,116 @@
  */
 package Frames;
 
+
+import DAO.Conexion;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+
 /**
  *
  * @author amandagalan
  */
 public class Catalogo extends javax.swing.JPanel {
-
+    Conexion conex = new Conexion();    
     /**
      * Creates new form Catalogo
      */
     public Catalogo() {
         initComponents();
+    }
+    
+    public void mostrar(String tabla){
+        String consultaSql = "SELECT * FROM " + tabla;
+        DefaultTableModel model = new DefaultTableModel();
+        String[] datos = new String[6];
+        conex.conectar();
+        model.addColumn("Cod");
+        model.addColumn("Numero");
+        model.addColumn("Nombre");
+        model.addColumn("Genero");
+        model.addColumn("Fecha");
+        model.addColumn("Información");
+        CatalogoBBDD.setModel(model);
+        try (Connection connection = conex.getConexion();
+             PreparedStatement statement = connection.prepareStatement(consultaSql)) {
+            
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+               datos [0] = resultSet.getString(1);
+               datos [1] = resultSet.getString(2); // por si acaso no sale, es un INT
+               datos [2] = resultSet.getString(3);
+               datos [3] = resultSet.getString(4);
+               datos [4] = resultSet.getString(5); // por si acaso no sale, es un DATE
+               datos[5] = resultSet.getString(6);
+               model.addRow(datos);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void MostrarNombre(String tabla){
+        String consultaSqlNombres = "SELECT codEspectaculo, nombreEspectaculo FROM " + tabla;
+        DefaultTableModel model = new DefaultTableModel();
+        String[] datos = new String[2];
+        conex.conectar();
+        model.addColumn("Codigo");
+        model.addColumn("Nombre");
+        CatalogoBBDD.setModel(model);
+        try (Connection connection = conex.getConexion();
+             PreparedStatement statement = connection.prepareStatement(consultaSqlNombres)) {
+            
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+               datos [0] = resultSet.getString(1);
+               datos [1] = resultSet.getString(2);
+               model.addRow(datos);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }   
+    }
+    
+    public void mostrarInformacion(String tabla){
+        String consultaSqlInformacion = "SELECT codEspectaculo, nombreEspectaculo, informacionEspectaculo FROM " + tabla;
+        DefaultTableModel model = new DefaultTableModel();
+        String[] datos = new String[3];
+        conex.conectar();
+        model.addColumn("Codigo");
+        model.addColumn("Nombre");
+        model.addColumn("Información");
+        CatalogoBBDD.setModel(model);
+        try (Connection connection = conex.getConexion();
+             PreparedStatement statement = connection.prepareStatement(consultaSqlInformacion)) {
+            
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+               datos [0] = resultSet.getString(1);
+               datos [1] = resultSet.getString(2);
+               datos [2] = resultSet.getString(3);
+               model.addRow(datos);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }   
     }
 
     /**
@@ -26,30 +125,164 @@ public class Catalogo extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        CatalogoBBDD = new javax.swing.JTable();
+        MostrarCatalogo = new javax.swing.JButton();
+        MostrarNombres = new javax.swing.JButton();
+        MostrarInformacion = new javax.swing.JButton();
 
-        jLabel1.setText("Catálogo");
+        setBackground(new java.awt.Color(187, 187, 187));
+
+        CatalogoBBDD.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Cod", "Nombre", "Genero", "Fecha", "Num", "Info"
+            }
+        ));
+        jScrollPane1.setViewportView(CatalogoBBDD);
+
+        MostrarCatalogo.setText("Mostrar Catalogo");
+        MostrarCatalogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MostrarCatalogoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                MostrarCatalogoMouseExited(evt);
+            }
+        });
+        MostrarCatalogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostrarCatalogoActionPerformed(evt);
+            }
+        });
+
+        MostrarNombres.setText("Mostrar Nombres");
+        MostrarNombres.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MostrarNombresMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MostrarNombresMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                MostrarNombresMouseExited(evt);
+            }
+        });
+        MostrarNombres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostrarNombresActionPerformed(evt);
+            }
+        });
+
+        MostrarInformacion.setText("Mostrar Información");
+        MostrarInformacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MostrarInformacionMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MostrarInformacionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                MostrarInformacionMouseExited(evt);
+            }
+        });
+        MostrarInformacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostrarInformacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(171, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(178, 178, 178))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(MostrarCatalogo)
+                .addGap(18, 18, 18)
+                .addComponent(MostrarNombres)
+                .addGap(18, 18, 18)
+                .addComponent(MostrarInformacion)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addContainerGap(260, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(387, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MostrarCatalogo)
+                    .addComponent(MostrarNombres)
+                    .addComponent(MostrarInformacion))
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 38, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void MostrarCatalogoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarCatalogoMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarCatalogoMouseEntered
+
+    private void MostrarCatalogoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarCatalogoMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarCatalogoMouseExited
+
+    private void MostrarCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarCatalogoActionPerformed
+        // TODO add your handling code here:
+        MostrarCatalogo.setBackground(Color.gray);
+        mostrar("prueba");
+    }//GEN-LAST:event_MostrarCatalogoActionPerformed
+
+    private void MostrarNombresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarNombresMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarNombresMouseClicked
+
+    private void MostrarNombresMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarNombresMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarNombresMouseEntered
+
+    private void MostrarNombresMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarNombresMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarNombresMouseExited
+
+    private void MostrarNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarNombresActionPerformed
+        // TODO add your handling code here:
+        MostrarNombre("prueba");
+    }//GEN-LAST:event_MostrarNombresActionPerformed
+
+    private void MostrarInformacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarInformacionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarInformacionMouseClicked
+
+    private void MostrarInformacionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarInformacionMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarInformacionMouseEntered
+
+    private void MostrarInformacionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MostrarInformacionMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MostrarInformacionMouseExited
+
+    private void MostrarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarInformacionActionPerformed
+        // TODO add your handling code here:
+        mostrarInformacion("prueba");
+    }//GEN-LAST:event_MostrarInformacionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    public javax.swing.JTable CatalogoBBDD;
+    private javax.swing.JButton MostrarCatalogo;
+    private javax.swing.JButton MostrarInformacion;
+    private javax.swing.JButton MostrarNombres;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import Interfaces.CRUD;
-import logica.Cliente;
+import Logica.Cliente;
 
 public class ClienteDao extends Conexion implements CRUD<Cliente> {
 

@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import logica.Entrada;
-import logica.Espectaculo;
-import logica.Cliente;
+import Logica.Cliente;
+import Logica.Entrada;
+import Logica.Espectaculo;
 
 public class EntradaDao extends Conexion {
 

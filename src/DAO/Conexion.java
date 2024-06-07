@@ -8,20 +8,44 @@ public class Conexion {
 
     Connection conexion;
 
-    public Connection getConexion() {
-        return conexion;
-    }
+    
     private final String url = "jdbc:mariadb://localhost:3306/jdbc";
-    private final String user = "root";
-    private final String pass = "admin";
+    private String user;
+    private String pass;
+    private static String usuarioActual;
+    private static String contraseñaActual;
+    
+    public boolean login(String user,String pass){
+        boolean resultado = false;
+        
+        try {
+            conexion = DriverManager.getConnection(url, user, pass);
+            resultado = true;
+            usuarioActual = user;
+            contraseñaActual = pass;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultado;
+    }
 
     public void conectar() {
         
         try {
-            conexion = DriverManager.getConnection(url, user, pass);
+            conexion = DriverManager.getConnection(url, usuarioActual, contraseñaActual);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public Connection getConexion() {
+        return conexion;
+    }
+     public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     public void desconectar() {
@@ -33,18 +57,7 @@ public class Conexion {
             }
         } catch (SQLException e){
             e.printStackTrace();
-        }
+        }   
         
-        
-    }
-    public boolean login(String user,String pass){
-        boolean resultado = false;
-        try {
-            conexion = DriverManager.getConnection(url, user, pass);
-            resultado = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultado;
     }
 }

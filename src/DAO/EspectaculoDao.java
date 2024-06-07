@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Interfaces.CRUD;
-import logica.Espectaculo;
+import Logica.Espectaculo;
 
 public class EspectaculoDao extends Conexion implements CRUD<Espectaculo> {
 
