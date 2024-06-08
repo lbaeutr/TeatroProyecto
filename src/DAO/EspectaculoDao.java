@@ -12,14 +12,13 @@ import Logica.Espectaculo;
 public class EspectaculoDao extends Conexion implements CRUD<Espectaculo> {
     @Override
     public List<Espectaculo> listarTodos() {
-        String codEspectaculo;
+        conectar();
+        String codEspectaculo, nombreEspectaculo, informacionEspectaculo, genero;
         int numeroEntradas;
-        String nombreEspectaculo;
-        String genero;
         LocalDate fechaEspectaculo;
         Espectaculo espectaculo = null;
         List<Espectaculo> listaEspectaculos = new ArrayList();
-        String consultaSQL = "SELECT * FROM espectaculo";
+        String consultaSQL = "SELECT * FROM Espectaculo";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -27,21 +26,25 @@ public class EspectaculoDao extends Conexion implements CRUD<Espectaculo> {
                 nombreEspectaculo = resultSet.getString("nombreEspectaculo");
                 genero = resultSet.getString("genero");
                 fechaEspectaculo = resultSet.getDate("fechaEspectaculo").toLocalDate();
+                informacionEspectaculo = resultSet.getString("informacionEspectaculo");
                 numeroEntradas = resultSet.getInt("numeroEntradas");
-                espectaculo = new Espectaculo(codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, numeroEntradas);
+                espectaculo = new Espectaculo(codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, informacionEspectaculo, numeroEntradas);
                 listaEspectaculos.add(espectaculo);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
         return listaEspectaculos;
     }
 
     @Override
     public Espectaculo leerPorId(String codEspectaculo) {
-        String consultaSQL = "SELECT * FROM espectaculo WHERE codEspectaculo = ?";
-        String nombreEspectaculo;
-        String genero;
+        conectar();
+        String consultaSQL = "SELECT * FROM Espectaculo WHERE codEspectaculo = ?";
+        String nombreEspectaculo, genero, informacionEspectaculo;
         LocalDate fechaEspectaculo;
         int numeroEntradas;
         Espectaculo espectaculo = null;
@@ -52,48 +55,63 @@ public class EspectaculoDao extends Conexion implements CRUD<Espectaculo> {
                 nombreEspectaculo = resultSet.getString("nombreEspectaculo");
                 genero = resultSet.getString("genero");
                 fechaEspectaculo = resultSet.getDate("fechaEspectaculo").toLocalDate();
+                informacionEspectaculo = resultSet.getString("informacionEspectaculo");
                 numeroEntradas = resultSet.getInt("numeroEntradas");
-                espectaculo = new Espectaculo(codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, numeroEntradas);
+                espectaculo = new Espectaculo(codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, informacionEspectaculo, numeroEntradas);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
         return espectaculo;
     }
 
     @Override
     public void crear(Espectaculo espectaculo) {
-        String consultaSQL = "INSERT INTO espectaculo (codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, numeroEntradas) VALUES (?, ?, ?, ?, ?)";
+        conectar();
+        String consultaSQL = "INSERT INTO Espectaculo (codEspectaculo, nombreEspectaculo, genero, fechaEspectaculo, informacionEspectaculo, numeroEntradas) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, espectaculo.getCodEspectaculo());
             statement.setString(2, espectaculo.getNombreEspectaculo());
             statement.setString(3, espectaculo.getGenero());
             statement.setDate(4, Date.valueOf(espectaculo.getFechaEspectaculo()));
-            statement.setInt(5, espectaculo.getNumeroEntradas());
+            statement.setString(5, espectaculo.getInformacionEspectaculo());
+            statement.setInt(6, espectaculo.getNumeroEntradas());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
     }
 
     @Override
     public void actualizar(Espectaculo espectaculo) {
-        String consultaSQL = "UPDATE espectaculo SET nombreEspectaculo = ?, genero = ?, fechaEspectaculo, numeroEntradas WHERE codEspectaculo = ?";
+        conectar();
+        String consultaSQL = "UPDATE espectaculo SET nombreEspectaculo = ?, genero = ?, fechaEspectaculo, informacionEspectaculo, numeroEntradas WHERE codEspectaculo = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, espectaculo.getNombreEspectaculo());
             statement.setString(2, espectaculo.getGenero());
             statement.setDate(3, Date.valueOf(espectaculo.getFechaEspectaculo()));
-            statement.setInt(4, espectaculo.getNumeroEntradas());
+            statement.setString(4, espectaculo.getInformacionEspectaculo());
+            statement.setInt(5, espectaculo.getNumeroEntradas());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            desconectar();
+        }
     }
 
     @Override
-    public void eliminar(String id) {
+    public void eliminar(String codEspectaculo) {
+        conectar ();
         int filasAfectadas;
-        String consultaSQL = "DELETE FROM espectaculo WHERE codEspectaculo = ?";
+        String consultaSQL = "DELETE FROM Espectaculo WHERE codEspectaculo = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, "codEspectaculo");
             filasAfectadas = statement.executeUpdate();
@@ -104,6 +122,9 @@ public class EspectaculoDao extends Conexion implements CRUD<Espectaculo> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
     }
 }

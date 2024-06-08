@@ -1,21 +1,20 @@
 package Logica;
-
 import java.time.LocalDate;
 
 public class Espectaculo {
-
     private String codEspectaculo;
     private String nombreEspectaculo;
     private String genero;
     private LocalDate fechaEspectaculo;
+    private String informacionEspectaculo;
     private int numeroEntradas;
 
-    public Espectaculo(String codEspectaculo, String nombreEspectaculo, String genero, LocalDate fechaEspectaculo,
-            int numeroEntradas) {
+    public Espectaculo(String codEspectaculo, String nombreEspectaculo, String genero, LocalDate fechaEspectaculo, String informacionEspectaculo, int numeroEntradas) {
         this.codEspectaculo = codEspectaculo;
         this.nombreEspectaculo = nombreEspectaculo;
         this.genero = genero;
         this.fechaEspectaculo = fechaEspectaculo;
+        this.informacionEspectaculo = informacionEspectaculo;
         this.numeroEntradas = numeroEntradas;
     }
 
@@ -51,6 +50,14 @@ public class Espectaculo {
         this.fechaEspectaculo = fechaEspectaculo;
     }
 
+    public String getInformacionEspectaculo() {
+        return informacionEspectaculo;
+    }
+
+    public void setInformacionEspectaculo(String informacionEspectaculo) {
+        this.informacionEspectaculo = informacionEspectaculo;
+    }
+    
     public int getNumeroEntradas() {
         return numeroEntradas;
     }
@@ -58,5 +65,4 @@ public class Espectaculo {
     public void setNumeroEntradas(int numeroEntradas) {
         this.numeroEntradas = numeroEntradas;
     }
-
 }

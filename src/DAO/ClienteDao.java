@@ -10,7 +10,8 @@ import Logica.Cliente;
 public class ClienteDao extends Conexion implements CRUD<Cliente> {
     @Override
     public void actualizar(Cliente cliente) {
-        String consultaSQL = "UPDATE clientes SET nombre = ?, prApellido = ?, sgApellido = ? WHERE dni = ?";
+        conectar();
+        String consultaSQL = "UPDATE Cliente SET nombre = ?, prApellido = ?, sgApellido = ? WHERE dni = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, cliente.getNombre());
             statement.setString(2, cliente.getPrApellido());
@@ -19,26 +20,40 @@ public class ClienteDao extends Conexion implements CRUD<Cliente> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally{
+            desconectar();
+        }
     }
 
     @Override
     public void crear(Cliente cliente) {
-        String consultaSQL = "INSERT INTO clientes (dni, nombre, prApellido, sgApellido) VALUES (?, ?, ?, ?)";
+        conectar();
+        int filas;
+        String consultaSQL = "INSERT INTO Cliente (dni, nombre, prApellido, sgApellido) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, cliente.getDni());
             statement.setString(2, cliente.getNombre());
             statement.setString(3, cliente.getPrApellido());
             statement.setString(4, cliente.getSgApellido());
-            statement.executeUpdate();
+            filas=statement.executeUpdate();
+            if (filas>0) {
+                System.out.println("Cliente guardado");
+            } else {
+                System.out.println("Error al guardar");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally{
+            desconectar();
         }
     }
 
     @Override
     public void eliminar(String dni) {
+        conectar();
         int filasAfectadas;
-        String consultaSQL = "DELETE FROM clientes WHERE dni = ?";
+        String consultaSQL = "DELETE FROM Cliente WHERE dni = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, dni);
             filasAfectadas = statement.executeUpdate();
@@ -50,14 +65,16 @@ public class ClienteDao extends Conexion implements CRUD<Cliente> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            desconectar();
+        }
     }
 
     @Override
     public Cliente leerPorId(String dni) {
-        String consultaSQL = "SELECT * FROM clientes WHERE id = ?";
-        String nombre;
-        String prApellido;
-        String sgApellido;
+        conectar();
+        String consultaSQL = "SELECT * FROM Cliente WHERE dni = ?";
+        String nombre, prApellido, sgApellido;
         Cliente clienteEncontrado = null;
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, dni);
@@ -71,18 +88,19 @@ public class ClienteDao extends Conexion implements CRUD<Cliente> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally{
+            desconectar();
+        }
         return clienteEncontrado;
     }
 
     @Override
     public List<Cliente> listarTodos() {
-        String dni;
-        String nombre;
-        String prApellido;
-        String sgApellido;
+        conectar();
+        String dni, nombre, prApellido, sgApellido;
         Cliente cliente = null;
         List<Cliente> listaClientes = new ArrayList();
-        String consultaSQL = "SELECT * FROM clientes";
+        String consultaSQL = "SELECT * FROM Cliente";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -95,6 +113,9 @@ public class ClienteDao extends Conexion implements CRUD<Cliente> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
         return listaClientes;
     }

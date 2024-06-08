@@ -1,4 +1,5 @@
 package Logica;
+
 public class Cliente {
     private String dni;
     private String nombre;

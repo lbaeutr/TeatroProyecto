@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import Logica.*;
+
 public class EntradaDao extends Conexion {
     public void actualizar(Entrada entrada, Cliente cliente, Espectaculo espectaculo) {
-        String consultaSQL = "UPDATE entrada SET codEspectaculo = ?, dni = ?, fila = ?, columna = ?, fechaCompra = ?, precio = ? WHERE codEntrada = ?";
+        conectar();
+        String consultaSQL = "UPDATE Entrada SET codEspectaculo = ?, dni = ?, fila = ?, columna = ?, fechaCompra = ?, precio = ? WHERE codEntrada = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, espectaculo.getCodEspectaculo());
             statement.setString(2, cliente.getDni());
@@ -21,10 +23,14 @@ public class EntradaDao extends Conexion {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            desconectar();
+        }
     }
 
     public void crear(Entrada entrada, Cliente cliente, Espectaculo espectaculo) {
-        String consultaSQL = "INSERT INTO entrada (codEspectaculo, dni, fila, columna, fechacompra, precio) VALUES (?, ?, ?, ?, ?, ?)";
+        conectar();
+        String consultaSQL = "INSERT INTO Entrada (codEspectaculo, dni, fila, columna, fechacompra, precio) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setString(1, espectaculo.getCodEspectaculo());
             statement.setString(2, cliente.getDni());
@@ -36,10 +42,14 @@ public class EntradaDao extends Conexion {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            desconectar();
+        }
     }
 
     public void eliminar(String id) {
-        String consultaSQL = "DELETE FROM entrada WHERE codEntrada = ?";
+        conectar();
+        String consultaSQL = "DELETE FROM Entrada WHERE codEntrada = ?";
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setInt(1, Integer.parseInt(id));
             int filasAfectadas = statement.executeUpdate();
@@ -51,50 +61,67 @@ public class EntradaDao extends Conexion {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+            desconectar();
+        }
     }
 
     public Entrada leerPorId(String id) {
-        String consultaSQL = "SELECT * FROM entrada WHERE codEntrada = ?";
+        conectar();
+        String consultaSQL = "SELECT * FROM Entrada WHERE codEntrada = ?";
+        int fila, columna;
+        String codEntrada, codEspectaculo, dni;
+        Date fechaCompra;
+        double precio;
         Entrada entrada = null;
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             statement.setInt(1, Integer.parseInt(id));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String codEntrada = resultSet.getString("codEntrada");
-                String codEspectaculo = resultSet.getString("codEspectaculo");
-                String dni = resultSet.getString("dni");
-                int fila = resultSet.getInt("fila");
-                int columna = resultSet.getInt("columna");//todo mirar esto de aqui
-                Date fechaCompra = resultSet.getDate("fechaCompra");
-                double precio = resultSet.getDouble("precio");
-                entrada = new Entrada(codEntrada, codEspectaculo, dni, fila, columna, fechaCompra.toLocalDate(),
-                        precio);
+                codEntrada = resultSet.getString("codEntrada");
+                codEspectaculo = resultSet.getString("codEspectaculo");
+                dni = resultSet.getString("dni");
+                fila = resultSet.getInt("fila");
+                columna = resultSet.getInt("columna");//todo mirar esto de aqui
+                fechaCompra = resultSet.getDate("fechaCompra");
+                precio = resultSet.getDouble("precio");
+                entrada = new Entrada(codEntrada, codEspectaculo, dni, fila, columna, fechaCompra.toLocalDate(), precio);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
         return entrada;
     }
 
     public List<Entrada> listarTodos() {
-        String consultaSQL = "SELECT * FROM entrada";
+        conectar();
+        String consultaSQL = "SELECT * FROM Entrada";
         List<Entrada> listaEntradas = new ArrayList<>();
+        int fila, columna;
+        String codEntrada, codEspectaculo, dni;
+        Date fechaCompra;
+        double precio;
         try (PreparedStatement statement = conexion.prepareStatement(consultaSQL)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String codEntrada = resultSet.getString("codEntrada");
-                String codEspectaculo = resultSet.getString("codEspectaculo");
-                String dni = resultSet.getString("dni");
-                int fila = resultSet.getInt("fila");
-                int columna = resultSet.getInt("columna");
-                Date fechaCompra = resultSet.getDate("fechaCompra");
-                double precio = resultSet.getDouble("precio");
-                Entrada entrada = new Entrada(codEntrada, codEspectaculo, dni, fila, columna, fechaCompra.toLocalDate(),
-                        precio);
+                codEntrada = resultSet.getString("codEntrada");
+                codEspectaculo = resultSet.getString("codEspectaculo");
+                dni = resultSet.getString("dni");
+                fila = resultSet.getInt("fila");
+                columna = resultSet.getInt("columna");
+                fechaCompra = resultSet.getDate("fechaCompra");
+                precio = resultSet.getDouble("precio");
+                Entrada entrada = new Entrada(codEntrada, codEspectaculo, dni, fila, columna, fechaCompra.toLocalDate(), precio);
                 listaEntradas.add(entrada);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally {
+            desconectar();
         }
         return listaEntradas;
     }

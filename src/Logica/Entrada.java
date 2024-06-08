@@ -8,8 +8,7 @@ public class Entrada {
     private LocalDate fechaCompra;
     private double precio;
 
-    public Entrada(String codEntrada, Cliente cliente, Espectaculo espectaculo, int fila, int columna,
-            LocalDate fechaCompra, double precio) {
+    public Entrada(String codEntrada, Cliente cliente, Espectaculo espectaculo, int fila, int columna, LocalDate fechaCompra, double precio) {
         this.codEntrada = codEntrada;
         this.cliente = cliente;
         this.espectaculo = espectaculo;
@@ -19,8 +18,7 @@ public class Entrada {
         this.precio = precio;
     }
 
-    public Entrada(String codEntrada, String codEspectaculo, String dni, int fila, int columna, LocalDate localDate,
-            double precio) {
+    public Entrada(String codEntrada, String codEspectaculo, String dni, int fila, int columna, LocalDate localDate, double precio) {
     }
 
     public String getCodEntrada() {

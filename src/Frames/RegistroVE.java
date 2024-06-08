@@ -1,7 +1,11 @@
 package Frames;
 import DAO.ClienteDao;
+import DAO.Conexion;
 import Logica.Cliente;
+import javax.swing.JOptionPane;
+
 public class RegistroVE extends javax.swing.JPanel {
+    Conexion conex = new Conexion();
     public RegistroVE() {
         initComponents();
     }
@@ -115,16 +119,27 @@ public class RegistroVE extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarActionPerformed
-        VE ventaEntradas = new VE();
-        ventaEntradas.setSize(670, 480);
-        ventaEntradas.setVisible(true);
-        contenido.removeAll();
-        contenido.add(ventaEntradas);
-        contenido.revalidate();
-        contenido.repaint();
-        Cliente cliente = new Cliente (TFdni.getText(), TFnombre.getText(), TFprApellido.getText(), TFsgApellido.getText());
-        ClienteDao clienteDao = new ClienteDao();
-        clienteDao.crear(cliente);
+        if (TFdni.getText().isEmpty() || TFnombre.getText().isEmpty() || TFprApellido.getText().isEmpty() || TFsgApellido.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+        } else {
+            Cliente cliente = new Cliente (TFdni.getText(), TFnombre.getText(), TFprApellido.getText(), TFsgApellido.getText());
+            ClienteDao clienteDao = new ClienteDao();
+            clienteDao.crear(cliente);
+            Cliente clienteGuardado = clienteDao.leerPorId(cliente.getDni());
+            if (clienteGuardado != null) {
+                JOptionPane.showMessageDialog(this, "Cliente guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                VE ventaEntradas = new VE(clienteGuardado);
+                ventaEntradas.setSize(670, 480);
+                ventaEntradas.setVisible(true);
+                contenido.removeAll();
+                contenido.add(ventaEntradas);
+                contenido.revalidate();
+                contenido.repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_EnviarActionPerformed
 
 
